@@ -1,26 +1,373 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Design tokens — modernized night-runway palette
+   Layered ambient lighting, glass surfaces, refined accent system
+--------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Base canvas — deep navy, slightly warmer than pure black */
+  --bg-base: #070a14;
+  --bg-deep: #04060d;
+  --bg-canvas: #0a0e1c;
+
+  /* Glass surfaces — tuned for backdrop-blur legibility */
+  --surface-1: rgba(20, 26, 46, 0.65);
+  --surface-2: rgba(28, 36, 60, 0.72);
+  --surface-3: rgba(40, 50, 78, 0.82);
+  --surface-glass: rgba(255, 255, 255, 0.03);
+
+  /* Accent system — modern, slightly desaturated, premium feel */
+  --edge-amber: #ffb547;
+  --edge-amber-soft: #ffcd7a;
+  --edge-amber-glow: rgba(255, 181, 71, 0.45);
+
+  --fare-drop: #34e3a8;
+  --fare-drop-glow: rgba(52, 227, 168, 0.4);
+  --fare-drop-soft: rgba(52, 227, 168, 0.14);
+
+  --fare-rise: #ff6b80;
+  --fare-rise-glow: rgba(255, 107, 128, 0.4);
+  --fare-rise-soft: rgba(255, 107, 128, 0.14);
+
+  --stalled: #6b7791;
+
+  /* Type scale */
+  --text-primary: #f0f4fb;
+  --text-secondary: #c7cfde;
+  --text-muted: #8a93aa;
+  --text-faint: #5d6580;
+
+  /* Borders & strokes */
+  --line-soft: rgba(255, 255, 255, 0.05);
+  --line-medium: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.14);
+
+  /* Effects */
+  --grid-line: rgba(255, 181, 71, 0.025);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px -12px rgba(0, 0, 0, 0.55);
+  --shadow-glow-amber: 0 0 32px -8px var(--edge-amber-glow);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-night: var(--bg-base);
+  --color-deep: var(--bg-deep);
+  --color-canvas: var(--bg-canvas);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-panel: var(--surface-1);
+  --color-raised: var(--surface-2);
+  --color-amber: var(--edge-amber);
+  --color-amber-soft: var(--edge-amber-soft);
+  --color-drop: var(--fare-drop);
+  --color-rise: var(--fare-rise);
+  --color-stalled: var(--stalled);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
+  --font-data: var(--font-jetbrains-mono);
+
+  --animate-flicker: flicker 2.4s steps(1, end) infinite;
+  --animate-breathe: breathe 2.4s ease-in-out infinite;
+  --animate-blink: blink 1.15s steps(2, start) infinite;
+  --animate-scanline: scanline 9s linear infinite;
+  --animate-marquee: marquee 70s linear infinite;
+  --animate-pulse-soft: pulse-soft 2.8s ease-in-out infinite;
+  --animate-shimmer: shimmer 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.5s ease-out both;
+
+  @keyframes flicker {
+    0%, 6%   { opacity: 1; }
+    7%       { opacity: 0.55; }
+    9%       { opacity: 1; }
+    38%      { opacity: 1; }
+    40%      { opacity: 0.3; }
+    43%      { opacity: 0.75; }
+    45%      { opacity: 1; }
+    72%      { opacity: 0.65; }
+    75%      { opacity: 1; }
+    88%      { opacity: 0.85; }
+    90%      { opacity: 1; }
+  }
+
+  @keyframes breathe {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.88); }
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  @keyframes scanline {
+    0%   { transform: translateY(-110vh); }
+    100% { transform: translateY(110vh); }
+  }
+
+  @keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.55; }
+    50%      { opacity: 1; }
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Base — layered ambient gradient mesh + subtle grain
+--------------------------------------------------------------------------- */
+
+html {
+  color-scheme: dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient gradient mesh — modern, soft, premium */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 1100px 600px at 50% -180px, rgba(255, 181, 71, 0.12), transparent 65%),
+    radial-gradient(ellipse 800px 500px at 90% 30%, rgba(255, 107, 128, 0.06), transparent 65%),
+    radial-gradient(ellipse 800px 500px at 5% 70%, rgba(52, 227, 168, 0.05), transparent 65%),
+    radial-gradient(ellipse 600px 400px at 50% 110%, rgba(120, 100, 255, 0.05), transparent 65%);
+  background-attachment: fixed;
+}
+
+/* Faint grid — modern fintech aesthetic */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 30%, transparent 90%);
+}
+
+/* App wrapper needs z-index above ambient layers */
+#__app, body > * {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--edge-amber) 35%, transparent);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 2px solid var(--edge-amber);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Signature details
+--------------------------------------------------------------------------- */
+
+/* Runway centerline divider — dashed edge-lighting strip */
+.runway-strip {
+  height: 2px;
+  background-image: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--edge-amber) 80%, transparent) 0px,
+    color-mix(in srgb, var(--edge-amber) 80%, transparent) 22px,
+    transparent 22px,
+    transparent 40px
+  );
+  opacity: 0.55;
+  box-shadow: 0 0 14px var(--edge-amber-glow);
+}
+
+/* Split-flap tile hinge line — refined, subtle seam */
+.flap-seam::before {
+  content: "";
+  position: absolute;
+  inset-inline: 8%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(0, 0, 0, 0.55) 20%,
+    rgba(0, 0, 0, 0.55) 80%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Redacted price blocks for the degraded / signal-lost state */
+.redacted-price {
+  letter-spacing: 0.08em;
+  background: linear-gradient(
+    90deg,
+    var(--stalled) 0%,
+    #3a4254 45%,
+    var(--stalled) 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Glow ring used on accent elements */
+.glow-amber {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--edge-amber) 40%, transparent),
+    0 0 28px -6px var(--edge-amber-glow);
+}
+
+.glow-drop {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--fare-drop) 40%, transparent),
+    0 0 28px -6px var(--fare-drop-glow);
+}
+
+.glow-rise {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--fare-rise) 40%, transparent),
+    0 0 28px -6px var(--fare-rise-glow);
+}
+
+/* Faint inner bevel used on tile surfaces — adds depth */
+.bevel-inset {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.35);
+}
+
+/* Glass card — backdrop-blur with subtle inner highlight */
+.glass {
+  background: var(--surface-1);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--line-soft);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+    var(--shadow-md);
+}
+
+.glass-strong {
+  background: var(--surface-2);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid var(--line-medium);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    var(--shadow-lg);
+}
+
+/* Marquee track — duplicated content slides */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 70s linear infinite;
+}
+
+/* Terminal-style chip / pill (for badges and tags) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-medium);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Floating panel lift on hover */
+.lift {
+  transition: transform 0.4s cubic-bezier(0.22, 0.9, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.22, 0.9, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.lift:hover {
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
 }
